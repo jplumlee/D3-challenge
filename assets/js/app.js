@@ -75,8 +75,7 @@ function renderYAxes(newYScale, yAxis) {
   return yAxis;
 }
 
-// function used for updating circles group with a transition to
-// new circles
+// function used for updating circles group with a transition to new circles
 function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
 
   circlesGroup.transition()
@@ -87,37 +86,47 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
   return circlesGroup;
 }
 
+// function renderLabels(circleLabels, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+
+//   circleLabels.transition()
+//     .duration(1000)
+//     .attr("cx", d => newXScale(d[chosenXAxis]))
+//     .attr("cy", d => newYScale(d[chosenYAxis]));
+
+//   return circleLabels;
+// }
+
 // function used for updating circles group with new tooltip
 function updateToolTip(circlesGroup, chosenXAxis, chosenYAxis) {
 
   var xlabel;
 
   if (chosenXAxis === "poverty") {
-    xlabel = "Poverty:";
+    xlabel = "Poverty (%):";
   }
   else if (chosenXAxis === "income") {
-    xlabel = "Median Income:";
+    xlabel = "Median Income: $";
   }
   else {
-    (xlabel = "Age");
+    xlabel = "Age: ";
   }
 
   var ylabel;
 
   if (chosenYAxis === "healthcare") {
-    ylabel = "Lacks Healthcare (%)";
+    ylabel = "Lacks Healthcare (%): ";
   }
   else if (chosenYAxis === "smokes") {
-    ylabel = "Smokes:";
+    ylabel = "Smokes (%): ";
   }
   else {
-    (ylabel = "Obesity");
+    ylabel = "Obesity (%): ";
   }
 
   var toolTip = d3.tip()
     .attr("class", "d3-tip")
     .offset([80, -60])
-    .html(d => `${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}%`);
+    .html(d => `${d.state}<br>${xlabel} ${d[chosenXAxis]}<br>${ylabel} ${d[chosenYAxis]}`);
 
   circlesGroup.call(toolTip);
 
@@ -130,7 +139,7 @@ function updateToolTip(circlesGroup, chosenXAxis, chosenYAxis) {
     });
 
   return circlesGroup;
-}
+};
 
 // Retrieve data from the CSV file and execute everything below
 d3.csv("./assets/data/data.csv").then(healthData => {
@@ -175,6 +184,11 @@ d3.csv("./assets/data/data.csv").then(healthData => {
     .attr("opacity", 0.5)
     .attr("stroke", "black");
 
+  // var circleLabels = chartGroup.selectAll(".circles")
+  // .apped("text")
+  // .attr("x", d => xLinearScale(d[chosenXAxis]))
+  // .attr("y", d => yLinearScale(d[chosenYAxis]));
+
   // Create group for three x-axis labels
   var xlabelsGroup = chartGroup.append("g")
     .attr("transform", `translate(${width / 2}, ${height + 20})`);
@@ -210,7 +224,7 @@ d3.csv("./assets/data/data.csv").then(healthData => {
     .attr("y", -20)
     .attr("dy", "1em")
     .attr("value", "healthcare")
-    .classed("inactive", true)
+    .classed("active", true)
     .text("Lacks Healthcare (%)");
 
   var smokesLabel = ylabelsGroup.append("text")
@@ -253,7 +267,7 @@ d3.csv("./assets/data/data.csv").then(healthData => {
         xAxis = renderXAxes(xLinearScale, xAxis);
 
         // updates circles with new x values
-        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScalem, chosenYAxis);
+        circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis, yLinearScale, chosenYAxis);
 
         // updates tooltips with new info
         circlesGroup = updateToolTip(circlesGroup, chosenXAxis, chosenYAxis);
