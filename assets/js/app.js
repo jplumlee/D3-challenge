@@ -179,15 +179,17 @@ d3.csv("./assets/data/data.csv").then(healthData => {
     .join("circle")
     .attr("cx", d => xLinearScale(d[chosenXAxis]))
     .attr("cy", d => yLinearScale(d[chosenYAxis]))
-    .attr("r", 20)
-    .attr("fill", "pink")
+    .attr("r", 10)
+    .attr("fill", "blue")
     .attr("opacity", 0.5)
     .attr("stroke", "black");
 
   // var circleLabels = chartGroup.selectAll(".circles")
-  // .apped("text")
+  // .join("text")
   // .attr("x", d => xLinearScale(d[chosenXAxis]))
-  // .attr("y", d => yLinearScale(d[chosenYAxis]));
+  // .attr("y", d => yLinearScale(d[chosenYAxis]))
+  // .attr("font-size", "10px")
+  // .text(d => d.abbr);
 
   // Create group for three x-axis labels
   var xlabelsGroup = chartGroup.append("g")
